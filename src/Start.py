@@ -21,7 +21,7 @@ if __name__ == '__main__':
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             print(exc_type, fname, exc_tb.tb_lineno)
 
-    print("Web Scraping will be on URL", url,  " with max depth ", n)
+    print("Web Scraping will be on URL", url,  " with max depth ", maxdepth)
 
     webscrapperword = WebScapperWord([])
     webscrapperword.startprocess(url, maxdepth)
