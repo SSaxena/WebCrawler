@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import os
 import csv
 
+
 # extract all words from HTML and calculate the top 10 words
 # The Top 10 Words on each Page are stored in CSV wrt to each Web Page URL
 class HTMLProcessor:
@@ -13,6 +14,7 @@ class HTMLProcessor:
     # CSV File name using the date format
     date = datetime.datetime.now()
     csvfilename = ''
+
     def __init__(self, pageurl):
         self.url = pageurl
 
@@ -21,8 +23,9 @@ class HTMLProcessor:
         self.url = pageurl
         self.page = pagedoc
         # csv file name initialized once
-        self.csvfilename = 'web-{year}-{month}-{day}-{min}'.format(year=self.date.year, month=self.date.month, day=self.date.day,
-                                                              min=self.date.minute)
+        self.csvfilename = 'web-{year}-{month}-{day}-{min}'.format(year=self.date.year, month=self.date.month,
+                                                                   day=self.date.day,
+                                                                   min=self.date.minute)
 
     # Word Frequency counter after crawling a web-page
 
@@ -65,6 +68,7 @@ class HTMLProcessor:
     # count and top_20  words and store with URL
     def create_dictionary(self, clean_list):
         word_count = {}
+        word_count2 = {}
 
         for word in clean_list:
             if word in word_count:
@@ -72,15 +76,41 @@ class HTMLProcessor:
             else:
                 word_count[word] = 1
 
+        count = 0
+
+        for word2 in clean_list:
+            word2 = self.listToString(clean_list[count:count + 2])
+            if word2 in word_count2:
+                word_count2[word2] += 1
+            else:
+                word_count2[word2] = 1
+            count += 1
+
         ''' To get the count of each word in 
             the crawled page --> 
         <-- '''
 
         c = Counter(word_count)
+        c2 = Counter(word_count2)
 
         # returns the most occurring elements
         top = c.most_common(10)
+        top2 = c2.most_common(10)
         self.fileWriter(top)
+        self.fileWriter(top2)
+
+    # To convert a list to string
+    # Function to convert
+    def listToString(self, s):
+        # initialize an empty string
+        str1 = ""
+
+        # traverse in the string
+        for ele in s:
+            str1 += ele
+
+        # return string
+        return str1
 
     # Writing the data to csv file
     def fileWriter(self, inputString):
